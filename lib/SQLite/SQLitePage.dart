@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:sqflite_pro/screens/TodoList.dart';
 import 'package:sqflite_pro/helpers/dbmanager.dart';
@@ -9,17 +10,29 @@ class SQLitePage extends StatefulWidget {
 
 class _SQLitePageState extends State<SQLitePage> {
   final DbStudentManager dbmanager = new DbStudentManager();
-
   final _nameController = TextEditingController();
   final _courseController = TextEditingController();
   final _presenceController = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
   final List<String> _priorities = ['Yes', 'No'];
+  Future<List<Student>> _studentList; // Коллекция планов
 
   Student student;
   List<Student> studlist;
 
   int updateIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateTaskList();
+  }
+
+  _updateTaskList() {
+    setState(() {
+      _studentList = dbmanager.getStudentList(); // Получает коллекцию
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +54,7 @@ class _SQLitePageState extends State<SQLitePage> {
                 padding: const EdgeInsets.only(
                   top: 35,
                   right: 20,
-                  left: 190,
+                  left: 145,
                 ),
                 child: GestureDetector(
                   onTap: () {
@@ -124,7 +137,7 @@ class _SQLitePageState extends State<SQLitePage> {
                                 labelStyle: TextStyle(fontSize: 18),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10))),
-                            validator: (input) => _presenceController == null
+                            validator: (input) => input == null
                                 ? "Please Select a priority level"
                                 : null,
                             onChanged: (value) {
@@ -157,7 +170,7 @@ class _SQLitePageState extends State<SQLitePage> {
                         height: 20,
                       ),
                       FutureBuilder(
-                        future: dbmanager.getStudentList(),
+                        future: _studentList,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             studlist = snapshot.data;
@@ -168,7 +181,7 @@ class _SQLitePageState extends State<SQLitePage> {
                                 Student st = studlist[index];
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 5),
+                                      horizontal: 0, vertical: 5),
                                   child: Card(
                                     elevation: 3,
                                     child: Row(
@@ -231,8 +244,9 @@ class _SQLitePageState extends State<SQLitePage> {
                                 );
                               },
                             );
+                          } else {
+                            return new CircularProgressIndicator();
                           }
-                          return new CircularProgressIndicator();
                         },
                       )
                     ],
@@ -257,7 +271,6 @@ class _SQLitePageState extends State<SQLitePage> {
         dbmanager.insertStudent(st).then((id) => {
               _nameController.clear(),
               _courseController.clear(),
-              _presenceController.clear(),
               print('Student Added to Db ${id}')
             });
       } else {
@@ -269,7 +282,6 @@ class _SQLitePageState extends State<SQLitePage> {
               setState(() {
                 studlist[updateIndex].name = _nameController.text;
                 studlist[updateIndex].course = _courseController.text;
-                studlist[updateIndex].presence = _presenceController.text;
               }),
               _nameController.clear(),
               _courseController.clear(),

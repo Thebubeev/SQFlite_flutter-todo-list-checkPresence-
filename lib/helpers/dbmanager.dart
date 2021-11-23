@@ -12,7 +12,7 @@ class DbStudentManager {
     if (_database == null) {
       _database = await openDatabase(
           join(await getDatabasesPath(), "people.db"),
-          version: 3, onCreate: (Database db, int version) async {
+          version: 4, onCreate: (Database db, int version) async {
         await db.execute(
           "CREATE TABLE people(id INTEGER PRIMARY KEY autoincrement, name TEXT, course TEXT, presence TEXT)",
         );

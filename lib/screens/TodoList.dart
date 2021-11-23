@@ -22,7 +22,7 @@ class _TodoListScreeenState extends State<TodoListScreeen> {
 
   _updateTaskList() {
     setState(() {
-      _taskList = DatabaseHelper.instance.getTaskList(); // Получает коллекцию 
+      _taskList = DatabaseHelper.instance.getTaskList(); // Получает коллекцию
     });
   }
 
