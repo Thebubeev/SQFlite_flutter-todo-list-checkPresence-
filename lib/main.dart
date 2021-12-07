@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite_pro/SQLite/SQLitePage.dart';
+import 'package:sqflite_pro/screens/TodoList.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: SQLitePage(),
+      home: TodoListScreeen(),
     );
   }
 }

@@ -63,16 +63,6 @@ class _TodoListScreeenState extends State<TodoListScreeen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(
-                            Icons.arrow_back,
-                            size: 30,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
                         SizedBox(
                           height: 20,
                         ),
